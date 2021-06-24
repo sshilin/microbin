@@ -11,7 +11,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-// Version to be overrided with -ldflags
+// Version can be overrided with -ldflags
 var Version = "v.dev"
 
 func main() {
