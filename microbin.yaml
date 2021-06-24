@@ -2,40 +2,43 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: microbin
+  labels:
+    app.kubernetes.io/name: microbin
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: microbin
   labels:
-    app: microbin
-    service: microbin
+    app.kubernetes.io/name: microbin
 spec:
   ports:
   - name: http
     port: 8080
     targetPort: 8080
   selector:
-    app: microbin
+    app.kubernetes.io/name: microbin
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: microbin
+  labels:
+    app.kubernetes.io/name: microbin
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: microbin
+      app.kubernetes.io/name: microbin
   template:
     metadata:
       labels:
-        app: microbin
+        app.kubernetes.io/name: microbin
     spec:
       serviceAccountName: microbin
       containers:
       - name: microbin
-        image: microbin:latest
+        image: sshilin/microbin:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

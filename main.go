@@ -11,7 +11,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-// Version can be overrided with -ldflags
+// Version can be overridden via ldflags at the build time
 var Version = "v.dev"
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Get("/", routes.About(Version))
 	r.Get("/headers", routes.RequestHeaders())
-	log.Fatal(http.ListenAndServe(getenv("ADDR", "")+":"+getenv("PORT", "8080"), r))
+	log.Fatal(http.ListenAndServe(getenv("IFACE", "")+":"+getenv("PORT", "8080"), r))
 }
 
 func getenv(key, defaultValue string) string {
