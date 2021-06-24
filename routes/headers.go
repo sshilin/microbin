@@ -5,26 +5,45 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/sshilin/microbin/k8s"
+	"github.com/sshilin/microbin/downward"
 )
 
+type Pod struct {
+	Name      string `json:"name"`
+	Namespace string `json:"namespace"`
+	Node      string `json:"node"`
+}
+
 type Response struct {
-	Pod     *k8s.Pod          `json:"pod,omitempty"`
+	Pod     *Pod              `json:"pod,omitempty"`
 	Headers map[string]string `json:"headers"`
 }
 
-func RequestHeaders() http.HandlerFunc {
+func RequestHeaders(dw downward.API) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		response := &Response{Headers: formatHeaders(r.Header)}
-		if pod := k8s.GetPodInfo(); pod.Name != "" {
-			response.Pod = &pod
-		}
+		response.Pod = getPodInfo(dw)
+
 		data, err := json.MarshalIndent(response, "", "  ")
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
 		w.Write(data)
+	}
+}
+
+func getPodInfo(dw downward.API) *Pod {
+	podName := dw.PodName()
+	podNamespace := dw.PodNamespace()
+	nodeName := dw.NodeName()
+	if podName == "" && podNamespace == "" && nodeName == "" {
+		return nil
+	}
+	return &Pod{
+		Name:      podName,
+		Namespace: podNamespace,
+		Node:      nodeName,
 	}
 }
 

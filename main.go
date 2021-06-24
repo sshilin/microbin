@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/sshilin/microbin/downward"
 	"github.com/sshilin/microbin/routes"
 
 	"github.com/go-chi/chi/v5"
@@ -20,7 +21,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Get("/", routes.About(Version))
-	r.Get("/headers", routes.RequestHeaders())
+	r.Get("/headers", routes.RequestHeaders(downward.New()))
 	log.Fatal(http.ListenAndServe(getenv("IFACE", "")+":"+getenv("PORT", "8080"), r))
 }
 
