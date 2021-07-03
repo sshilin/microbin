@@ -23,7 +23,7 @@ or
 ```
 microbin v.dev
 ```
-- GET /headers - prints response headers and pod info
+- GET /headers - prints request headers and pod info
 ```
 {
   "pod": {
