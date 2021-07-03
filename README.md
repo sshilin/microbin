@@ -32,7 +32,7 @@ microbin v.dev
     "node": "docker-desktop"
   },
   "headers": {
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*",
     "Accept-Encoding": "gzip, deflate",
     "Accept-Language": "en-US,en;q=0.9,ru;q=0.8",
     "Connection": "keep-alive",
