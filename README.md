@@ -15,15 +15,11 @@ or
 **API**
 
 - GET /
-
-Output:
 ```
 microbin v.dev
 ```
 
 - GET /headers
-
-Output:
 ```
 {
   "pod": {
