@@ -19,11 +19,11 @@ or
 
 ### Usage
 ---
-- GET /
+- GET / - prints version
 ```
 microbin v.dev
 ```
-- GET /headers
+- GET /headers - prints response headers and pod info
 ```
 {
   "pod": {
