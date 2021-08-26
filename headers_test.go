@@ -1,4 +1,4 @@
-package routes
+package main
 
 import (
 	"encoding/json"
@@ -9,72 +9,75 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type mockDownwardAPI struct {
+type k8sClientMock struct {
 	podName      string
 	podNamespace string
 	nodeName     string
 }
 
-func (e mockDownwardAPI) PodName() string {
+func (e k8sClientMock) PodName() string {
 	return e.podName
 }
 
-func (e mockDownwardAPI) PodNamespace() string {
+func (e k8sClientMock) PodNamespace() string {
 	return e.podNamespace
 }
 
-func (e mockDownwardAPI) NodeName() string {
+func (e k8sClientMock) NodeName() string {
 	return e.nodeName
 }
 
 func TestHeaders(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		podInfo     mockDownwardAPI
+		podInfo     k8sClientMock
 		environment string
 	}{
 		{
 			desc:        "Docker environment",
 			environment: "docker",
-			podInfo:     mockDownwardAPI{},
+			podInfo:     k8sClientMock{},
 		},
 		{
 			desc:        "Kubernetes environment",
 			environment: "kubernetes",
-			podInfo: mockDownwardAPI{
+			podInfo: k8sClientMock{
 				podName:      "pod",
 				podNamespace: "namespace",
 				nodeName:     "node",
 			},
 		},
 	}
-	headers := map[string]string{
-		"Header1": "foo",
-		"Header2": "bar",
-	}
+
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
 			req := httptest.NewRequest("GET", "/headers", nil)
+			headers := map[string]string{
+				"Header1": "foo",
+				"Header2": "bar",
+			}
+			srv := Server{
+				router: nil,
+				k8s:    &tC.podInfo,
+			}
 			for k, v := range headers {
 				req.Header.Add(k, v)
 			}
 			rr := httptest.NewRecorder()
-			RequestHeaders(tC.podInfo)(rr, req)
+			srv.handleHeaders().ServeHTTP(rr, req)
 			data, err := ioutil.ReadAll(rr.Result().Body)
 			assert.NoError(t, err)
 
-			var response Response
+			var response map[string]interface{}
 			assert.NoError(t, json.Unmarshal(data, &response))
-
-			assert.EqualValues(t, response.Headers, headers)
 
 			switch tC.environment {
 			case "docker":
-				assert.Nil(t, response.Pod)
+				assert.Nil(t, response["pod"])
+				assert.NotNil(t, response["headers"])
 			case "kubernetes":
-				assert.Equal(t, tC.podInfo.podName, response.Pod.Name)
-				assert.Equal(t, tC.podInfo.podNamespace, response.Pod.Namespace)
-				assert.Equal(t, tC.podInfo.nodeName, response.Pod.Node)
+				assert.NotNil(t, response["pod"])
+				assert.NotNil(t, response["headers"])
 			}
 		})
 	}
