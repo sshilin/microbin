@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -13,12 +15,23 @@ import (
 var version = "unknown"
 
 var opts struct {
-	// Listen on host:port
-	Listen string
+	Listen string // LISTEN
+	Tls    struct {
+		Enabled  bool   // TLS_ENABLED
+		KeyFile  string // TLS_KEY_FILE
+		CertFile string // TLS_CERT_FILE
+	}
 }
 
 func init() {
 	opts.Listen = getenv("LISTEN", "0.0.0.0:8080")
+	tlsEnabled, err := strconv.ParseBool(getenv("TLS_ENABLED", "false"))
+	if err != nil {
+		fmt.Println("Invalid value TLS_ENABLED")
+	}
+	opts.Tls.Enabled = tlsEnabled
+	opts.Tls.KeyFile = getenv("TLS_KEY_FILE", "")
+	opts.Tls.CertFile = getenv("TLS_CERT_FILE", "")
 }
 
 func main() {
@@ -39,7 +52,11 @@ func run() error {
 	}
 	server.routes()
 
-	return http.ListenAndServe(opts.Listen, server)
+	if opts.Tls.Enabled {
+		return http.ListenAndServeTLS(opts.Listen, opts.Tls.CertFile, opts.Tls.KeyFile, server)
+	} else {
+		return http.ListenAndServe(opts.Listen, server)
+	}
 }
 
 type Server struct {
