@@ -1,12 +1,6 @@
-# microbin
-
 [![CI Build](https://github.com/sshilin/microbin/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/ci-build.yaml)
 
-Httpbin-like simple application with intention to be deployed on the Kubernetes cluster, adds pod info to json responses.
-
-Goals:
-- investigate traffic routing in K8s cluster
-- play with GitHub Actions and Packages
+Microbin is an httpbin-like application with intention to be deployed on the Kubernetes cluster, adds pod info to json responses.
 
 ### Deployment
 ---
