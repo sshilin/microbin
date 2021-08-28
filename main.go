@@ -16,7 +16,7 @@ var version = "unknown"
 
 var opts struct {
 	Listen string // LISTEN
-	Tls    struct {
+	TLS    struct {
 		Enabled  bool   // TLS_ENABLED
 		KeyFile  string // TLS_KEY_FILE
 		CertFile string // TLS_CERT_FILE
@@ -29,13 +29,14 @@ func init() {
 	if err != nil {
 		fmt.Println("Invalid value TLS_ENABLED")
 	}
-	opts.Tls.Enabled = tlsEnabled
-	opts.Tls.KeyFile = getenv("TLS_KEY_FILE", "")
-	opts.Tls.CertFile = getenv("TLS_CERT_FILE", "")
+	opts.TLS.Enabled = tlsEnabled
+	opts.TLS.KeyFile = getenv("TLS_KEY_FILE", "")
+	opts.TLS.CertFile = getenv("TLS_CERT_FILE", "")
 }
 
 func main() {
 	log.Printf("Starting microbin %s", version)
+	log.Printf("options: %+v\n", opts)
 
 	if err := run(); err != http.ErrServerClosed {
 		log.Fatalln(err)
@@ -52,8 +53,8 @@ func run() error {
 	}
 	server.routes()
 
-	if opts.Tls.Enabled {
-		return http.ListenAndServeTLS(opts.Listen, opts.Tls.CertFile, opts.Tls.KeyFile, server)
+	if opts.TLS.Enabled {
+		return http.ListenAndServeTLS(opts.Listen, opts.TLS.CertFile, opts.TLS.KeyFile, server)
 	} else {
 		return http.ListenAndServe(opts.Listen, server)
 	}
