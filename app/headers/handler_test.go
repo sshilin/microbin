@@ -128,7 +128,7 @@ func TestHandlerHeadersFull(t *testing.T) {
 	resp, err := unmarshalToAny(w.Body)
 	assert.NoError(err)
 
-	assert.Contains(resp, "workload")
+	assert.Contains(resp, "pod")
 	assert.Contains(resp, "headers")
 	assert.Contains(resp, "bearer")
 
