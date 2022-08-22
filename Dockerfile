@@ -1,15 +1,20 @@
-FROM golang:1.16.5-alpine as build-env
+FROM golang:1.19-alpine as build-env
 
-ARG VERSION=v.dev
+COPY . /build
 
-WORKDIR /go/src/app
+WORKDIR /build/app
 
-COPY . .
+RUN apk add --no-cache --update git
 
-RUN go build -ldflags="-X main.Version=$VERSION" -o /go/bin/app
+RUN revision=$(git rev-parse --abbrev-ref HEAD)-$(git log -1 --format=%h) && \
+    go build -ldflags="-X main.build=${revision}" -o microbin
 
-FROM alpine
+FROM alpine:3.16
 
-COPY --from=build-env /go/bin/app /
+RUN adduser -H -S microbin -G users
 
-CMD ["/app"]
+USER microbin
+
+COPY --from=build-env /build/app/microbin /
+
+CMD ["/microbin"]
