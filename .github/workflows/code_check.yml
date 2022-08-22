@@ -1,0 +1,40 @@
+name: Code check
+
+on: ["push"]
+
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.19'
+      - name: Run tests
+        run: go test -v -race -covermode=atomic -coverprofile=$GITHUB_WORKSPACE/profile.cov ./...
+        working-directory: app
+      - name: Install goveralls
+        run: go install github.com/mattn/goveralls@latest
+      - name: Submit coverage
+        run: goveralls -coverprofile=$GITHUB_WORKSPACE/profile.cov -service=github
+        env:
+          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: app
+  linter:
+    name: Run linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.19'
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.48.0
+          working-directory: app
