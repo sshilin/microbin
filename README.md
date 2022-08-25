@@ -1,12 +1,34 @@
 [![CI Build](https://github.com/sshilin/microbin/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/ci-build.yaml)
 
-Microbin is a simple containerazed http(s) server which replys with the request headers and additional info about the application instance.
+Microbin echoing the request's headers back with additional info about the application instance and more. This is a simple containerized http(s) service, ready to start with zero configuration, that is usefull for learning and throubleshooting cloud networks.
 
-### Usage
+**Features**
+- Decode JWT from the Authorization header
+- K8s metainfo
+- Prometheus metrics
+- Structured logs
+
+> **Warning**
+> This may expose sensitive data contained in the headers
+
+### How to use
 ---
-Endpoints:
-- `GET /` - return version
-- `GET /headers` - return request headers and pod info in JSON
+Docker:
+
+    docker run --rm -d -p 8080:8080 --name microbin ghcr.io/sshilin/microbin:latest
+
+Kubectl:
+
+    kubectl apply -f microbin.yaml
+
+Helm:
+
+    helm repo add test https://sshilin.github.io/microbin
+
+    helm install microbin microbin
+### Endpoints
+---
+- `GET /headers` - returns request's headers in Json format
 ```
 $ curl http://localhost:8080/headers
 {
@@ -33,29 +55,19 @@ The table below provides an overview of optional environment variables that can 
 | `TLS_KEY_FILE`      | TLS key filepath            | ""              |
 | `TLS_CERT_FILE`     | TLS cert filepath           | ""              |
 
-### Deployment
----
-Starting Docker container:
-
-    docker run --rm -d -p 8080:8080 --name microbin ghcr.io/sshilin/microbin:latest
-
-Deploying on Kubernetes:
-
-    kubectl apply -f microbin.yaml
-
 ### Enable HTTPS
 ---
-This example shows how to enable HTTPS with a self signed certificate. A self signed cert can be generated via a single openssl command
+This example shows how to enable HTTPS with a self signed certificate.
+
+Create cert:
 
     openssl req -x509 -nodes -newkey rsa:4096 -keyout ./certs/key.pem -out ./certs/cert.pem -subj "//CN=localhost" -days 365
 
 **Docker**
 
-Run a container with mounted key and cert files. (MSYS_NO_PATHCONV=1 temparary disables path conversion in GitBash/Msys2)
-
+Run a container with mounted key and cert files:
 ```bash
-$ MSYS_NO_PATHCONV=1 \
-  docker run --rm -d -p 8080:8080 --name microbin \
+$ docker run --rm -d -p 8080:8080 --name microbin \
   -v "$(pwd)/certs:/var/tls:ro" \
   -e TLS_ENABLED=true \
   -e TLS_KEY_FILE=/var/tls/key.pem \
@@ -65,7 +77,7 @@ $ MSYS_NO_PATHCONV=1 \
 
 **Kubernetes**
 
-First upload the cert and key to the `microbin-certs` secret, then deploy `microbin-https.yaml`
+First create `microbin-certs` secret with cert and key files, then create `microbin-https.yaml`
 
     kubectl create secret generic microbin-certs --from-file=./certs
 
