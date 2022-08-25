@@ -23,9 +23,10 @@ Kubectl:
 
 Helm:
 
-    helm repo add test https://sshilin.github.io/microbin
+    helm repo add microbin https://sshilin.github.io/microbin
 
-    helm install microbin microbin
+    helm install --generate-name  microbin/microbin
+
 ### Endpoints
 ---
 - `GET /headers` - returns request's headers in Json format
