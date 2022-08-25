@@ -1,4 +1,4 @@
-[![CI Build](https://github.com/sshilin/microbin/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/ci-build.yaml)
+[![Build](https://github.com/sshilin/microbin/actions/workflows/build.yml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/build.yml)
 
 Microbin echoing the request's headers back with additional info about the application instance and more. This is a simple containerized http(s) service, ready to start with zero configuration, that is usefull for learning and throubleshooting cloud networks.
 
