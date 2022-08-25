@@ -23,7 +23,7 @@ Kubectl:
 
 Helm:
 
-    helm repo add test https://sshilin.github.io/microbin
+    helm repo add microbin https://sshilin.github.io/microbin
 
     helm install microbin microbin
 ### Endpoints
