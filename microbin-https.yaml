@@ -14,7 +14,7 @@ metadata:
 spec:
   ports:
   - name: https
-    port: 8080
+    port: 433
     targetPort: 8080
   selector:
     app.kubernetes.io/name: microbin
