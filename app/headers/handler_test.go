@@ -135,6 +135,27 @@ func TestHandlerHeadersFull(t *testing.T) {
 	assert.Equal(w.Result().StatusCode, http.StatusOK)
 }
 
+func TestHandlerSkipNonJwtToken(t *testing.T) {
+	assert := assert.New(t)
+
+	r, _ := http.NewRequest("GET", "/headers", nil)
+	r.Header = http.Header{
+		"foo":           {"bar"},
+		"Authorization": {"Bearer unknown-format"},
+	}
+
+	w := httptest.NewRecorder()
+	Handler().ServeHTTP(w, r)
+
+	resp, err := unmarshalToAny(w.Body)
+	assert.NoError(err)
+
+	assert.Contains(resp, "headers")
+	assert.NotContains(resp, "bearer")
+
+	assert.Equal(w.Result().StatusCode, http.StatusOK)
+}
+
 func unmarshalToAny(buf *bytes.Buffer) (map[string]any, error) {
 	data, _ := io.ReadAll(buf)
 	var resp map[string]any
