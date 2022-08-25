@@ -1,9 +1,9 @@
 apiVersion: v2
 name: microbin
-description: Echoing request's headers back with pod info and more
+description: Echoing request headers with pod info and more
 
 type: application
 
 version: 1.0.0
 
-appVersion: "v0.3.0"
+appVersion: "v1.0.0"

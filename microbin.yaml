@@ -38,7 +38,7 @@ spec:
       serviceAccountName: microbin
       containers:
       - name: microbin
-        image: github.com/sshilin/microbin:dev
+        image: ghcr.io/sshilin/microbin:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

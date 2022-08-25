@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: ghcr.io/sshilin/microbin
   pullPolicy: IfNotPresent
-  tag: "v0.3.0"
+  tag: "v1.0.0"
 
 imagePullSecrets: []
 nameOverride: ""
