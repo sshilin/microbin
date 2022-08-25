@@ -1,9 +1,9 @@
 apiVersion: v2
 name: microbin
-description: Microbin chart for Kubernetes
+description: Echoing request's headers back with pod info and more
 
 type: application
 
-version: 0.1.0
+version: 1.0.0
 
 appVersion: "v0.3.0"
