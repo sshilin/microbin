@@ -29,14 +29,14 @@ func main() {
 
 func run() error {
 	cfg := struct {
-		Addr string
-		TLS  struct {
+		Listen string
+		TLS    struct {
 			Enabled  bool
 			KeyFile  string
 			CertFile string
 		}
 	}{
-		Addr: getenv("ADDRESS", "0.0.0.0:8080"),
+		Listen: getenv("LISTEN", "0.0.0.0:8080"),
 		TLS: struct {
 			Enabled  bool
 			KeyFile  string
@@ -57,7 +57,7 @@ func run() error {
 	r.Handle("/metrics", promhttp.Handler())
 
 	server := &http.Server{
-		Addr:    cfg.Addr,
+		Addr:    cfg.Listen,
 		Handler: r,
 	}
 
