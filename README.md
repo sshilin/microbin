@@ -9,7 +9,7 @@ Microbin sends back request headers plus k8s pod metainfo in json format. This i
 - Write structured logs
 
 > **Warning**
-> This may expose sensitive data contained in the headers
+> Microbin may expose sensitive data contained in the headers
 
 ### How to use
 ---
