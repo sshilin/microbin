@@ -1,6 +1,6 @@
 [![Build](https://github.com/sshilin/microbin/actions/workflows/build.yml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/build.yml)&nbsp;[![Go Report Card](https://goreportcard.com/badge/github.com/sshilin/microbin)](https://goreportcard.com/report/github.com/sshilin/microbin)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/sshilin/microbin/badge.svg)](https://coveralls.io/github/sshilin/microbin)
 
-Microbin sends back request headers plus k8s pod metainfo in json format. This is useful for quick checking ingress setup and service mesh rules.
+Microbin is an http service which sends back request headers plus k8s pod metainfo in json format. This is useful for quick checking ingress setup and service mesh rules.
 
 **Features**
 - Include pod metainfo
