@@ -73,7 +73,7 @@ $ docker run --rm -d -p 8080:8080 --name microbin \
   -e TLS_ENABLED=true \
   -e TLS_KEY_FILE=/var/tls/key.pem \
   -e TLS_CERT_FILE=/var/tls/cert.pem \
-  microbin:latest
+  ghcr.io/sshilin/microbin:latest
 ```
 
 **Kubernetes**
