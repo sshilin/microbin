@@ -1,12 +1,12 @@
 [![Build](https://github.com/sshilin/microbin/actions/workflows/build.yml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/build.yml)&nbsp;[![Go Report Card](https://goreportcard.com/badge/github.com/sshilin/microbin)](https://goreportcard.com/report/github.com/sshilin/microbin)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/sshilin/microbin/badge.svg)](https://coveralls.io/github/sshilin/microbin)
 
-Microbin echoing the request's headers back with additional info about the application instance and more. This is a simple containerized http(s) service, ready to start with zero configuration, that is usefull for learning and throubleshooting cloud networks.
+Microbin sends back request headers and k8s pod metainfo in json format. This can be useful for quick checking the ingress setup and service mesh rules.
 
 **Features**
-- Decode JWT from the Authorization header
-- K8s metainfo
-- Prometheus metrics
-- Structured logs
+- Include pod metainfo
+- Decode JWT from Authorization header
+- Expose Prometheus metrics
+- Write structured logs
 
 > **Warning**
 > This may expose sensitive data contained in the headers
