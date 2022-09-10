@@ -17,13 +17,13 @@ func Logger(logger *zerolog.Logger) func(next http.Handler) http.Handler {
 
 			defer func() {
 				logger.Info().
+					Str("remoteAddr", r.RemoteAddr).
+					Str("proto", r.Proto).
 					Str("method", r.Method).
 					Str("path", r.URL.Path).
 					Int("status", ww.Status()).
-					Str("remoteAddr", r.RemoteAddr).
-					Str("proto", r.Proto).
-					Dur("latency", time.Since(t1)).
 					Int("size", ww.BytesWritten()).
+					Dur("latency", time.Since(t1)).
 					Msg("served")
 			}()
 

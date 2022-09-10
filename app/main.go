@@ -12,19 +12,21 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
-	"github.com/sshilin/microbin/app/headers"
+	"github.com/sshilin/microbin/app/inspect"
 	"github.com/sshilin/microbin/app/middleware"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 )
 
 // build revision to be set via ldflags
-var build = "develop"
+var build = "dev"
 
-func main() {
-	log.Info().Str("build", build).Msg("starting")
-
-	if err := run(); err != nil && err != http.ErrServerClosed {
-		log.Fatal().Err(err).Msg("server error")
+func getenv(key, defaultValue string) string {
+	if val := os.Getenv(key); val != "" {
+		return val
 	}
+
+	return defaultValue
 }
 
 func run() error {
@@ -53,12 +55,20 @@ func run() error {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger(&log.Logger))
 	r.Use(middleware.Metrics())
-	r.Get("/headers", headers.Handler())
 	r.Handle("/metrics", promhttp.Handler())
+	r.NotFound(inspect.Handler())
+
+	var handler http.Handler
+
+	if cfg.TLS.Enabled {
+		handler = r
+	} else {
+		handler = h2c.NewHandler(r, &http2.Server{})
+	}
 
 	server := &http.Server{
 		Addr:    cfg.Listen,
-		Handler: r,
+		Handler: handler,
 	}
 
 	serverErrors := make(chan error, 1)
@@ -97,10 +107,10 @@ func run() error {
 	return nil
 }
 
-func getenv(key, defaultValue string) string {
-	if val := os.Getenv(key); val != "" {
-		return val
-	}
+func main() {
+	log.Info().Str("build", build).Msg("starting")
 
-	return defaultValue
+	if err := run(); err != nil && err != http.ErrServerClosed {
+		log.Fatal().Err(err).Msg("server error")
+	}
 }
