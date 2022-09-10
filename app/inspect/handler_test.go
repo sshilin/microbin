@@ -61,9 +61,9 @@ func TestRequestInfoHandler(t *testing.T) {
 
 			var resp map[string]any
 
-			json.Unmarshal(data, &resp)
-
+			err = json.Unmarshal(data, &resp)
 			assert.NoError(err)
+
 			assert.Contains(resp, "host")
 			assert.Contains(resp, "remote")
 			assert.Contains(resp, "proto")
