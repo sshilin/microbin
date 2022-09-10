@@ -1,10 +1,10 @@
 [![Build](https://github.com/sshilin/microbin/actions/workflows/build.yml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/build.yml)&nbsp;[![Go Report Card](https://goreportcard.com/badge/github.com/sshilin/microbin)](https://goreportcard.com/report/github.com/sshilin/microbin)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/sshilin/microbin/badge.svg)](https://coveralls.io/github/sshilin/microbin)
 
-Microbin is an http(s) service that inspects any request sent to it. This is can useful for understanding how proxies modified the request.
+Microbin is an http(s) service that inspects any requests sent to it. This can be useful in a situation when you need to understand how intermediate proxies modifies the request until it reaches the destination.
 
 ## Features
 - Outputs formatted json
-- Upgrades protocol to http2 (ALPN and H2C)
+- Upgrades protocol to http2 when requested (ALPN and H2C)
 - Exposes Promethus metrics
 
 > **Warning**
