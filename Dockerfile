@@ -1,20 +1,28 @@
-FROM golang:1.19-alpine as build-env
+FROM golang:1.19-alpine as builder
 
-COPY . /build
+ENV CGO_ENABLED=0
 
-WORKDIR /build/app
+WORKDIR /src
 
 RUN apk add --no-cache --update git
 
-RUN revision=$(git rev-parse --abbrev-ref HEAD)-$(git log -1 --format=%h) && \
-    go build -ldflags="-X main.build=${revision}" -o microbin
+COPY go.mod go.sum ./
 
-FROM alpine:3.16
+RUN go mod download
 
-RUN adduser -H -S microbin -G users
+COPY . /src
 
-USER microbin
+RUN git_rev=$(git rev-parse --abbrev-ref HEAD)-$(git log -1 --format=%h) && \
+    cd app && go build -trimpath -ldflags="-w -s -X main.build=${git_rev}" -o /build/app
 
-COPY --from=build-env /build/app/microbin /
+RUN echo "nobody:x:65534:65534:nobody:/:" > /tmp/passwd
 
-CMD ["/microbin"]
+FROM scratch
+
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /tmp/passwd /etc/passwd
+COPY --from=builder /build/app /app
+
+USER nobody
+
+ENTRYPOINT ["/app"]

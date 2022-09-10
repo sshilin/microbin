@@ -1,4 +1,7 @@
 .github
+charts
+*.yml
+*.yaml
 LICENSE
 README.md
 Makefile
