@@ -1,17 +1,33 @@
 [![Build](https://github.com/sshilin/microbin/actions/workflows/build.yml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/build.yml)&nbsp;[![Go Report Card](https://goreportcard.com/badge/github.com/sshilin/microbin)](https://goreportcard.com/report/github.com/sshilin/microbin)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/sshilin/microbin/badge.svg)](https://coveralls.io/github/sshilin/microbin)
 
-Microbin is an http service which sends back request headers plus k8s pod metainfo in json format. This is useful for quick checking ingress setup and service mesh rules.
+An http(s) service that inspects any requests. This is can useful for understaning how proxies modify the request.
 
 **Features**
-- Include pod metainfo
-- Decode JWT from Authorization header
-- Expose Prometheus metrics
-- Write structured logs
+- Outputs formatted json
+- Upgrades protocol to http2 (ALPN and H2C)
+- Exposes Promethus metrics
 
 > **Warning**
-> Microbin may expose sensitive data contained in the headers
+> Output may expose sensitive data contained in the request
 
-### How to use
+### Example
+---
+```
+$ curl http://localhost:8080/headers
+
+{
+  "host": "ef1ddf2d8af6",
+  "remote": "127.0.0.1:57625",
+  "proto": "HTTP/1.1",
+  "method": "GET",
+  "uri": "/foo/bar?p1=1",
+  "headers": {
+    "Accept": "*/*",
+    "User-Agent": "curl/7.83.0"
+  }
+}
+```
+### How to install
 ---
 Docker:
 
@@ -27,28 +43,8 @@ Helm:
 
     helm install --generate-name  microbin/microbin
 
-### Endpoints
+### Configuration
 ---
-- `GET /headers` - returns request's headers in Json format
-```
-$ curl http://localhost:8080/headers
-{
-  "proto": "HTTP/1.1",
-  "headers": {
-    "Accept": "*/*",
-    "User-Agent": "curl/7.77.0"
-  },
-  "pod": {
-    "name": "microbin-58cf7dff8d-7ts8l",
-    "namespace": "default",
-    "node": "docker-desktop"
-  }
-}
-```
-### Environment Variables
----
-The table below provides an overview of optional environment variables that can be used to configure microbin.
-
 | Key                 |  Description                | Default         |
 |:--------------------|:----------------------------|:----------------|
 | `LISTEN`            | Listen on host:port         | 0.0.0.0:8080    |
@@ -56,13 +52,13 @@ The table below provides an overview of optional environment variables that can 
 | `TLS_KEY_FILE`      | TLS key filepath            | ""              |
 | `TLS_CERT_FILE`     | TLS cert filepath           | ""              |
 
-### Enable HTTPS
+### HTTPS
 ---
 This example shows how to enable HTTPS with a self signed certificate.
 
 Create cert:
 
-    openssl req -x509 -nodes -newkey rsa:4096 -keyout ./certs/key.pem -out ./certs/cert.pem -subj "//CN=localhost" -days 365
+    openssl req -x509 -nodes -newkey rsa:4096 -keyout key.pem -out cert.pem -subj "//CN=localhost" -days 365
 
 **Docker**
 
