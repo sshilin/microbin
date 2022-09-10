@@ -1,28 +1,36 @@
 [![Build](https://github.com/sshilin/microbin/actions/workflows/build.yml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/build.yml)&nbsp;[![Go Report Card](https://goreportcard.com/badge/github.com/sshilin/microbin)](https://goreportcard.com/report/github.com/sshilin/microbin)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/sshilin/microbin/badge.svg)](https://coveralls.io/github/sshilin/microbin)
 
-Microbin is an http(s) service that inspects any requests sent to it. This can be useful in a situation when you need to understand how intermediate proxies modifies the request until it reaches the destination.
+Microbin replies with http request headers and some additional details on any URL. This can be used in a situation when you need to understand how the intermediate proxies modify the request until it reaches the destination.
 
 ## Features
-- Outputs formatted json
-- Upgrades protocol to http2 when requested (ALPN and H2C)
-- Exposes Promethus metrics
+- Output formatted json
+- Upgrade protocol to http2 when requested (on ALPN or H2C)
+- Expose Promethus metrics
 
 > **Warning**
 > Output may expose sensitive data contained in the request
 
 ## Example
 ```
-$ curl http://localhost:8080/foo/bar?p1=1
+$ curl http://localhost/microbin/headers
 
 {
-  "host": "ef1ddf2d8af6",
-  "remote": "127.0.0.1:57625",
+  "host": "184a0422e442",
+  "remote": "172.18.0.6:47626",
   "proto": "HTTP/1.1",
   "method": "GET",
-  "uri": "/foo/bar?p1=1",
+  "uri": "/headers",
   "headers": {
     "Accept": "*/*",
-    "User-Agent": "curl/7.83.0"
+    "Accept-Encoding": "gzip",
+    "User-Agent": "curl/7.83.0",
+    "X-Forwarded-For": "172.18.0.1",
+    "X-Forwarded-Host": "localhost",
+    "X-Forwarded-Port": "80",
+    "X-Forwarded-Prefix": "/microbin",
+    "X-Forwarded-Proto": "http",
+    "X-Forwarded-Server": "23569d46b42c",
+    "X-Real-Ip": "172.18.0.1"
   }
 }
 ```
