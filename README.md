@@ -2,8 +2,7 @@
 
 Microbin is an http(s) service that inspects any request sent to it. This is can useful for understanding how proxies modified the request.
 
-**Features**
----
+## Features
 - Outputs formatted json
 - Upgrades protocol to http2 (ALPN and H2C)
 - Exposes Promethus metrics
@@ -11,8 +10,7 @@ Microbin is an http(s) service that inspects any request sent to it. This is can
 > **Warning**
 > Output may expose sensitive data contained in the request
 
-**Example**
----
+## Example
 ```
 $ curl http://localhost:8080/foo/bar?p1=1
 
@@ -29,8 +27,7 @@ $ curl http://localhost:8080/foo/bar?p1=1
 }
 ```
 
-**How to install**
----
+## How to install
 Docker:
 
     docker run --rm -d -p 8080:8080 --name microbin ghcr.io/sshilin/microbin:latest
@@ -45,9 +42,7 @@ Helm:
 
     helm install --generate-name  microbin/microbin
 
-**Configuration**
----
-
+## Configuration
 | Key                 |  Description                | Default         |
 |:--------------------|:----------------------------|:----------------|
 | `LISTEN`            | Listen on host:port         | 0.0.0.0:8080    |
@@ -55,9 +50,7 @@ Helm:
 | `TLS_KEY_FILE`      | TLS key filepath            | ""              |
 | `TLS_CERT_FILE`     | TLS cert filepath           | ""              |
 
-**HTTPS**
----
-
+## HTTPS
 This example shows how to enable HTTPS with a self signed certificate.
 
 Create cert:
