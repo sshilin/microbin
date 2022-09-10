@@ -1,8 +1,9 @@
 [![Build](https://github.com/sshilin/microbin/actions/workflows/build.yml/badge.svg)](https://github.com/sshilin/microbin/actions/workflows/build.yml)&nbsp;[![Go Report Card](https://goreportcard.com/badge/github.com/sshilin/microbin)](https://goreportcard.com/report/github.com/sshilin/microbin)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/sshilin/microbin/badge.svg)](https://coveralls.io/github/sshilin/microbin)
 
-An http(s) service that inspects any requests. This is can useful for understaning how proxies modify the request.
+Microbin is an http(s) service that inspects any request sent to it. This is can useful for understanding how proxies modified the request.
 
 **Features**
+---
 - Outputs formatted json
 - Upgrades protocol to http2 (ALPN and H2C)
 - Exposes Promethus metrics
@@ -10,10 +11,10 @@ An http(s) service that inspects any requests. This is can useful for understani
 > **Warning**
 > Output may expose sensitive data contained in the request
 
-### Example
+**Example**
 ---
 ```
-$ curl http://localhost:8080/headers
+$ curl http://localhost:8080/foo/bar?p1=1
 
 {
   "host": "ef1ddf2d8af6",
@@ -27,7 +28,8 @@ $ curl http://localhost:8080/headers
   }
 }
 ```
-### How to install
+
+**How to install**
 ---
 Docker:
 
@@ -43,8 +45,9 @@ Helm:
 
     helm install --generate-name  microbin/microbin
 
-### Configuration
+**Configuration**
 ---
+
 | Key                 |  Description                | Default         |
 |:--------------------|:----------------------------|:----------------|
 | `LISTEN`            | Listen on host:port         | 0.0.0.0:8080    |
@@ -52,8 +55,9 @@ Helm:
 | `TLS_KEY_FILE`      | TLS key filepath            | ""              |
 | `TLS_CERT_FILE`     | TLS cert filepath           | ""              |
 
-### HTTPS
+**HTTPS**
 ---
+
 This example shows how to enable HTTPS with a self signed certificate.
 
 Create cert:
