@@ -18,10 +18,33 @@ type response struct {
 	Headers map[string]string `json:"headers,omitempty"`
 }
 
-func encode(values map[string][]string) map[string]string {
-	h := make(map[string]string)
+func Handler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	for k, v := range values {
+		resp := &response{
+			Remote:  r.RemoteAddr,
+			Proto:   r.Proto,
+			Method:  r.Method,
+			URI:     r.RequestURI,
+			Headers: encode(r.Header),
+		}
+
+		if host, err := os.Hostname(); err == nil {
+			resp.Host = host
+		} else {
+			log.Err(err).Msg("get hostname")
+		}
+
+		if err := renderJson(w, resp); err != nil {
+			log.Err(err).Msg("render json response")
+			http.Error(w, "", http.StatusInternalServerError)
+		}
+	}
+}
+
+func encode(headers http.Header) map[string]string {
+	h := make(map[string]string, len(headers))
+	for k, v := range headers {
 		h[k] = strings.Join(v, ",")
 	}
 
@@ -36,33 +59,9 @@ func renderJson(w http.ResponseWriter, v any) error {
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-	_, err = w.Write(data)
-	if err != nil {
+	if _, err = w.Write(data); err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func Handler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		resp := &response{
-			Remote:  r.RemoteAddr,
-			Proto:   r.Proto,
-			Method:  r.Method,
-			URI:     r.RequestURI,
-			Headers: encode(r.Header),
-		}
-
-		if host, err := os.Hostname(); err == nil {
-			resp.Host = host
-		} else {
-			log.Err(err).Msg("get hostname;dd")
-		}
-
-		if err := renderJson(w, resp); err != nil {
-			log.Err(err).Msg("render json response")
-			http.Error(w, "", http.StatusInternalServerError)
-		}
-	}
 }
