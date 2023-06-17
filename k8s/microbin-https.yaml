@@ -14,7 +14,7 @@ metadata:
 spec:
   ports:
   - name: https
-    port: 433
+    port: 443
     targetPort: 8080
   selector:
     app.kubernetes.io/name: microbin
@@ -43,6 +43,8 @@ spec:
         ports:
         - containerPort: 8080
         env:
+        - name: LOG_FORMAT_JSON
+          value: "true"
         - name: TLS_ENABLED
           value: "true"
         - name: TLS_KEY_FILE
@@ -62,10 +64,10 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
         volumeMounts:
-        - name: certs
+        - name: cert
           mountPath: "/var/tls"
           readOnly: true
       volumes:
-      - name: certs
+      - name: cert
         secret:
-          secretName: microbin-certs
+          secretName: microbin-cert
