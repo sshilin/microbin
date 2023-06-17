@@ -1,5 +1,7 @@
 .github
-charts
+cert
+chart
+k8s
 *.yml
 *.yaml
 LICENSE
