@@ -7,16 +7,6 @@ Microbin accepts any HTTP request and returns the request's details including he
 docker run --name microbin -p 8080:8080 ghcr.io/sshilin/microbin:latest
 ```
 
-HTTPS:
-```
-docker run --name microbin -p 8080:8080 \
-  -v $(pwd)/cert:/var/cert:ro \
-  -e TLS_ENABLED=true \
-  -e TLS_KEY_FILE=/var/cert/key.pem \
-  -e TLS_CERT_FILE=/var/cert/cert.pem \
-  ghcr.io/sshilin/microbin:latest
-```
-
 **Running with kubectl**
 ```
 git clone https://github.com/sshilin/microbin.git && cd microbin
@@ -76,3 +66,19 @@ Example response:
 | `TLS_KEY_FILE`      | TLS key filepath            | ""              |
 | `TLS_CERT_FILE`     | TLS cert filepath           | ""              |
 | `LOG_FORMAT_JSON`   | Enable structured logs      | false           |
+
+## HTTPS Examples
+
+```
+docker run --name microbin -p 8080:8080 \
+  -v $(pwd)/cert:/var/cert:ro \
+  -e TLS_ENABLED=true \
+  -e TLS_KEY_FILE=/var/cert/key.pem \
+  -e TLS_CERT_FILE=/var/cert/cert.pem \
+  ghcr.io/sshilin/microbin:latest
+```
+
+```
+kubectl create secret generic microbin-cert --from-file=./cert
+kubectl apply -f k8s/microbin-https.yaml
+```
