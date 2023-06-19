@@ -2,6 +2,17 @@ apiVersion: v1
 entries:
   microbin:
   - apiVersion: v2
+    appVersion: v0.3.0
+    created: "2023-06-19T19:04:34.370412794Z"
+    description: Accepts any HTTP request and returns the request's details including
+      headers, parameters, query strings in JSON format
+    digest: 52cb251d4b3e37c533e0aaad93b9bef9f63635ca7732a8d7c6f28e554470c6b6
+    name: microbin
+    type: application
+    urls:
+    - https://github.com/sshilin/microbin/releases/download/microbin-1.0.1/microbin-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     appVersion: v1.0.0
     created: "2022-08-25T18:02:19.515015091Z"
     description: Echoing request headers with pod info and more
@@ -21,4 +32,4 @@ entries:
     urls:
     - https://github.com/sshilin/microbin/releases/download/microbin-0.1.0/microbin-0.1.0.tgz
     version: 0.1.0
-generated: "2022-08-25T18:02:19.515029291Z"
+generated: "2023-06-19T19:04:34.370426394Z"
