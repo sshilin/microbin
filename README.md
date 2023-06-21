@@ -4,7 +4,7 @@ Microbin accepts any HTTP request and returns the request's details including he
 
 **Running with Docker**
 ```
-docker run --name microbin -p 8080:8080 ghcr.io/sshilin/microbin:latest
+docker run --rm --name microbin -p 8080:8080 ghcr.io/sshilin/microbin:latest
 ```
 
 **Running with kubectl**
