@@ -24,6 +24,17 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: v0.3.0
+    created: "2023-06-21T17:15:09.288298168Z"
+    description: Accepts any HTTP request and returns the request's details including
+      headers, parameters, query strings in JSON format
+    digest: 8613a3c908bc34e6d876084d696adaa1488386c81e7490d90f75c87b1bf5f343
+    name: microbin
+    type: application
+    urls:
+    - https://github.com/sshilin/microbin/releases/download/microbin-0.3.0/microbin-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: v0.3.0
     created: "2022-08-25T17:17:34.993765617Z"
     description: Microbin chart for Kubernetes
     digest: 9e04330c8baeff73afe8407928051a97639a49e9c89c73936ed0e3a8760ea2ac
@@ -32,4 +43,4 @@ entries:
     urls:
     - https://github.com/sshilin/microbin/releases/download/microbin-0.1.0/microbin-0.1.0.tgz
     version: 0.1.0
-generated: "2023-06-19T19:04:34.370426394Z"
+generated: "2023-06-21T17:15:09.288316668Z"
