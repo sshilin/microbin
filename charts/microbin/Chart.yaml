@@ -4,6 +4,6 @@ description: Accepts any HTTP request and returns the request's details includin
 
 type: application
 
-version: 1.0.1
+version: 0.3.0
 
 appVersion: "v0.3.0"
